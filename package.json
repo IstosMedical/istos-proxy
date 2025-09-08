@@ -25,7 +25,11 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "nodemon": "^3.0.1",
     "eslint": "^8.50.0"
+=======
+    "nodemon": "^3.1.10"
+>>>>>>> 7cb9a67 (Add /run-assistant proxy route with Apps Script integration)
   }
 }
