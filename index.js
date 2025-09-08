@@ -7,10 +7,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// 🔐 Middleware: JSON parsing
 app.use(express.json());
 
-// Semantic route handler
+// 🌐 Middleware: CORS + Preflight
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// 🚀 Route: /run-assistant
 app.post("/run-assistant", async (req, res) => {
   const payload = req.body;
 
@@ -27,7 +38,6 @@ app.post("/run-assistant", async (req, res) => {
       .status(upstreamResponse.status)
       .set({
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
         "Content-Type": "application/json"
       })
       .send(responseText);
@@ -39,13 +49,13 @@ app.post("/run-assistant", async (req, res) => {
       .set({ "Access-Control-Allow-Origin": "*" })
       .json({
         fallback: true,
-        message: "⚠️ Proxy error. Please try again later.",
+        message: "⚠️ Assistant unavailable. Please try again later.",
         error: error.message
       });
   }
 });
 
-// Start server
+// 🟢 Start server
 app.listen(PORT, () => {
   console.log(`🚀 istos-proxy live at http://localhost:${PORT}`);
 });
